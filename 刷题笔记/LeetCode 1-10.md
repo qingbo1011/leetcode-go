@@ -105,6 +105,8 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 > }
 > ```
 
+
+
 # 3. 无重复字符的最长子串
 
 [LeetCode 3.无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
@@ -207,17 +209,80 @@ func max(x int, y int) int {
 
 
 
+# 9. 回文数
 
+[LeetCode 9. 回文数](https://leetcode.cn/problems/palindrome-number/)
 
+## 双指针
 
+思路：数字int转字符串string，然后双指针即可。思路很简单，直接看代码吧。
 
+代码如下：
 
+```go
+func isPalindrome(x int) bool {
+	if x >= 0 && x < 10 { // x是个位数，肯定是回文
+		return true
+	}
+	if x < 0 || x%10 == 0 { // x为负数，不可能为回文数; x最后一位为0，也显然不是回文数
+		return false
+	}
+	str := strconv.Itoa(x)
+	left, right := 0, len(str)-1
+	for left < right {
+		if str[left] != str[right] {
+			return false
+		}
+		left++
+		right--
+	}
+	return true
+}
+```
 
+## 数学
 
+**进阶：**你能不将整数转为字符串来解决这个问题吗？
 
+[官方题解](https://leetcode.cn/problems/palindrome-number/solution/hui-wen-shu-by-leetcode-solution/)
 
+首先处理一下特殊值，跟上面一样：
 
+- 负数肯定不是回文数，`return false`
+- 个位数肯定是回文数，`return true`
 
+接下来就是数学算法了。注意，如果直接将数字本身反转可能导致的**溢出问题**，所以我们**只反转int数字的后一半**，如果该数字是回文，其后半部分反转后应该与原始数字的前半部分相同。
+
+> 例如，输入 1221，我们可以将数字 “1221” 的后半部分从 “21” 反转为 “12”，并将其与前半部分 “12” 进行比较，因为二者相同，我们得知数字 1221 是回文。
+
+对于数字 1221，如果执行 `1221 % 10`，我们将得到最后一位数字 1，要得到倒数第二位数字，我们可以先通过除以 10 把最后一位数字从 1221 中移除，`1221 / 10 = 122`，再求出上一步结果除以 10 的余数，`122 % 10 = 2`，就可以得到倒数第二位数字。如果我们把最后一位数字乘以 10，再加上倒数第二位数字，`1 * 10 + 2 = 12`，就得到了我们想要的反转后的数字。如果继续这个过程，我们将得到更多位数的反转数字。
+
+现在的问题是，我们**如何知道反转数字的位数已经达到原始数字位数的一半**？
+
+由于整个过程我们不断将原始数字除以 `10`，然后给反转后的数字乘上 `10`，所以，**当原始数字小于或等于反转后的数字时，就意味着我们已经处理了一半位数的数字了**。
+
+![](https://img-qingbo.oss-cn-beijing.aliyuncs.com/img/20220908145508.png)
+
+代码如下：
+
+```go
+func isPalindrome(x int) bool {
+	// 特殊情况处理
+	if x >= 0 && x < 10 { // x是个位数，肯定是回文
+		return true
+	}
+	if x < 0 || x%10 == 0 { // x为负数，不可能为回文数; x最后一位为0，也显然不是回文数
+		return false
+	}
+	revertedNumber := 0
+	for x > revertedNumber {
+		revertedNumber = revertedNumber*10 + x%10
+		x = x / 10
+	}
+	// x为奇数：判断x == revertedNumber/10；x为偶数，判断：x == revertedNumber
+	return x == revertedNumber || x == revertedNumber/10
+}
+```
 
 
 
