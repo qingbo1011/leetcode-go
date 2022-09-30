@@ -39,6 +39,50 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
 
 
+# 27. 移除元素
+
+[LeetCode 27. 移除元素](https://leetcode.cn/problems/remove-element/)
+
+## 双指针
+
+[参考代码随想录： 移除元素](https://programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#%E6%80%9D%E8%B7%AF)
+
+定义快慢指针：
+
+- 快指针：寻找新数组的元素 （新数组就是不含有目标元素的数组）
+- 慢指针：指向更新新数组下标的位置
+
+> 快指针fast向右遍历旧数组：
+>
+> - 如果没有遇到要删除的元素，该元素是新数组的成员。所以将新元素赋值给慢指针slow的位置，并向右移动慢指针slow（）
+> - 如果遇到了要删除的元素，该元素不是新数组的成员。**此时什么都不用做，直接移动快指针fast即可**。（因为不需要更新慢指针slow）
+
+删除过程如下：
+
+![](https://img-qingbo.oss-cn-beijing.aliyuncs.com/img/20220916205643.gif)
+
+代码如下：
+
+```go
+func removeElement(nums []int, val int) int {
+	length := len(nums)
+	slow, fast := 0, 0
+	for fast = 0; fast < length; fast++ {
+		if nums[fast] != val { // 是新数组成员，要更新慢指针
+			nums[slow] = nums[fast]
+			slow++
+		}
+	}
+	nums = nums[:slow] // 更新一下数组
+	return slow
+}
+```
+
+> - 时间复杂度：O(n)
+> - 空间复杂度：O(1)
+
+
+
 # 30. 串联所有单词的子串
 
 [LeetCode 30. 串联所有单词的子串](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/)
