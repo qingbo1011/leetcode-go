@@ -5,6 +5,7 @@ func main() {
 }
 
 func searchInsert(nums []int, target int) int {
+	// return sort.SearchInts(nums, target)
 	left, right := 0, len(nums)-1
 	for left <= right {
 		middle := (left + right) / 2

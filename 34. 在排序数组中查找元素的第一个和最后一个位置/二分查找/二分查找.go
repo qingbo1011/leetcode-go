@@ -1,7 +1,15 @@
 package main
 
-func main() {
+import (
+	"fmt"
+	"sort"
+)
 
+func main() {
+	s := []int{15, 6, 8, 3, 5, 9, 1, 45, 66, 3, 8, -3}
+	sort.Ints(s)
+	fmt.Println(s) // [-3 1 3 3 5 6 8 8 9 15 45 66]
+	fmt.Println(sort.SearchInts(s, 5))
 }
 
 func searchRange(nums []int, target int) []int {

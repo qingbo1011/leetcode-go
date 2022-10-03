@@ -39,13 +39,35 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
 
 
+# 26. 删除有序数组中的重复项
+
+[LeetCode 26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+## 双指针
+
+参考题解：[【双指针】删除重复项-带优化思路](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/solution/shuang-zhi-zhen-shan-chu-zhong-fu-xiang-dai-you-hu/)
+
+注意**数组是有序的，那么重复的元素一定会相邻**。要求删除重复元素，实际上就是**将不重复的元素移到数组的左侧**。
+
+所以我们还是定义快慢指针slow和fast，比较slow和fast位置的元素是否相等：
+
+- 如果相等（`nums[slow]==nums[fast]`）：slow不变，fast后移一位（`fast++`）
+- 如果不相等（`nums[slow]!=nums[fast]`）：将fast位置的元素复制到slow的**后一位**（`nums[slow+1]=nums[fast]`），然后slow和fast都后移一位（`slow++`，`fast++`）
+
+
+
+
+
+
+
 # 27. 移除元素
 
 [LeetCode 27. 移除元素](https://leetcode.cn/problems/remove-element/)
 
 ## 双指针
 
-[参考代码随想录： 移除元素](https://programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#%E6%80%9D%E8%B7%AF)
+- [代码随想录： 移除元素](https://programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#%E6%80%9D%E8%B7%AF)
+- **[B站视频](https://www.bilibili.com/video/BV12A4y1Z7LP/)**
 
 定义快慢指针：
 

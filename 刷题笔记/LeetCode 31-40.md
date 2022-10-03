@@ -2,7 +2,79 @@
 
 [LeetCode 33. 搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
 
+## 二分查找
 
+参考[zwjason](https://leetcode.cn/u/zwjago/)的[题解](https://leetcode.cn/problems/search-in-rotated-sorted-array/solution/sou-suo-xuan-zhuan-pai-xu-shu-zu-er-fen-92jot/)。
+
+因为原数组是**严格升序**的，因此旋转后的数组可以分为**两部分的严格升序**，借鉴二分法进行查找。
+
+旋转后的数组，分为左半部分与右半部分，这两部分的大小关系如图所示：
+
+![](https://img-qingbo.oss-cn-beijing.aliyuncs.com/img/20221001203119.png)
+
+还是采用左闭右闭的区间`[left,right]`。
+
+因为原数组在某一点被旋转了，被分为左右两个部分，在这两个部分中数组是连续的。所以使用二分的必要条件就是：**middle和target必须要在同一部分。**
+
+所以在二分处理的时候我们要进行额外的判断：**判断 `middle` 在哪个部分**。
+
+判断`middle` 在哪个部分，只需要比较`nums[middle]`和`nums[left]`即可：
+
+- 若 `nums[middle] >= nums[left]`，则**middle在左半部分**：
+  - 若 `nums[middle] < target`，说明 target**只可能在左半部分**，可以使用二分（此时更新`left=middle+1`）
+  - 若 `nums[middle] > target`，说明 target**可能在左半部分也可能在右半部分**：
+    - target在左半部分（`target >= nums[left]`），target和middle都在左半部分，可以使用二分，更新`right=middle-1`
+    - target在右半部分，middle在左半部分而target在右半部分，不能使用二分。只能更新   `left = middle+1`
+- 若 `nums[middle] < nums[left]`，则**middle在右半部分**：
+  - 若 `nums[middle] < target`，说明 target**可能在左半部分也可能在有半部分**：
+    - target在左半部分（`target >= nums[left]`），不能使用二分，只能更新`right=middle-1`
+    - target在右半部分，可以使用二分，更新`left=middle+1`
+  - 若 `nums[middle] > target`，说明target只可能在右半部分。可以使用二分，更新`right=middle-1`
+
+> 上述分析，只需要像这样画画草图就能搞清楚了。
+>
+> ![](https://img-qingbo.oss-cn-beijing.aliyuncs.com/img/20221001213800.png)
+
+有了上面的分析，再解决这题就简单多了。
+
+代码如下：
+
+```go
+func search(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right { // 开始二分
+		middle := left + (right-left)>>1
+		if nums[middle] == target {
+			return middle
+		}
+		// 判断middle在左半部分还是右半部分
+		if nums[middle] >= nums[left] { // middle在左半部分
+			if nums[middle] < target { // target只可能在左半部分，和middle在同一边，可以使用二分
+				left = middle + 1
+			} else { // target可能在左半部分也可能在右半部分
+				if target >= nums[left] { // target在左半部分，和middle在同一边，可以使用二分
+					right = middle - 1
+				} else { // target在右半部分，和middle不在同一边，不能使用二分，只能更新left
+					left = middle + 1
+				}
+			}
+		} else { // middle在右半部分
+			if nums[middle] < target { // target可能在左半部分也可能在有半部分
+				if target >= nums[left] { // target在左半部分,和middle不在同一边，不能使用二分只能更新right
+					right = middle - 1
+				} else { // target在右半部分，和middle在同一边，可以使用二分
+					left = middle + 1
+				}
+			} else { // target只可能在右半部分，和middle在同一边，可以使用二分
+				right = middle - 1
+			}
+		}
+	}
+	return -1
+}
+```
+
+> 代码在if else上并没有简化，是为了体现分析到的各种情况。
 
 
 
@@ -168,8 +240,6 @@ func getLeft(nums []int, target int) int {
 	}
 ```
 
-
-
 完整代码如下：
 
 ```go
@@ -232,19 +302,27 @@ func getRight(nums []int, target int) int {
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## go sort包
+
+我看[官方题解](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/zai-pai-xu-shu-zu-zhong-cha-zhao-yuan-su-de-di-3-4/)的思路，跟上面二分查找的思路一样。但是使用了sort包下的`SearchInts`方法。
+
+> go sort包的用法，可以参考我之前的[笔记](https://www.qingbo1011.top/2022/04/28/Go%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/#go-sort%E5%8C%85)。
+
+在[LeetCode 35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)的题解中也提到过了，`sort.SearchInts`方法返回的是按自然顺序排序（升序）的切片中target的插入位置（即并返回目标值的索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置）。
+
+代码如下：
+
+```go
+func searchRange(nums []int, target int) []int {
+	leftBorder := sort.SearchInts(nums, target)
+	if leftBorder == len(nums) || nums[leftBorder] != target { // 说明target不存在数组中
+		return []int{-1, -1}
+	}
+	// target存在数组中,开始找rightBorder
+	rightBorder := sort.SearchInts(nums, target+1) - 1
+	return []int{leftBorder, rightBorder}
+}
+```
 
 
 
@@ -279,7 +357,15 @@ func searchInsert(nums []int, target int) int {
 }
 ```
 
-
+> Go sort包：
+>
+> ```go
+> func searchInsert(nums []int, target int) int {
+>    return sort.SearchInts(nums, target)
+> }
+> ```
+>
+> 这里使用Go sort包是想说明：`sort.SearchInts`方法返回的是按自然顺序排序（升序）的切片中target的插入位置。
 
 
 
