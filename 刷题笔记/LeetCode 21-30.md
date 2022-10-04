@@ -49,14 +49,30 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
 注意**数组是有序的，那么重复的元素一定会相邻**。要求删除重复元素，实际上就是**将不重复的元素移到数组的左侧**。
 
-所以我们还是定义快慢指针slow和fast，比较slow和fast位置的元素是否相等：
+所以我们还是定义快慢指针slow和fast（初始slow和fast都为0），比较slow和fast位置的元素是否相等：
 
 - 如果相等（`nums[slow]==nums[fast]`）：slow不变，fast后移一位（`fast++`）
 - 如果不相等（`nums[slow]!=nums[fast]`）：将fast位置的元素复制到slow的**后一位**（`nums[slow+1]=nums[fast]`），然后slow和fast都后移一位（`slow++`，`fast++`）
 
+fast遍历到原数组的最后一位时循环结束。**循环结束后slow指针位于新数组的最后一位**，即**删除重复元素的新数组长度为slow+1**。
 
+> ![](https://img-qingbo.oss-cn-beijing.aliyuncs.com/img/20221003112039.png)
 
+代码如下：
 
+```go
+func removeDuplicates(nums []int) int {
+	slow, fast := 0, 0
+	for fast = 0; fast < len(nums); fast++ {
+		if nums[slow] != nums[fast] {
+			nums[slow+1] = nums[fast]
+			slow++
+		}
+	}
+	nums = nums[:slow+1] // 更新数组
+	return slow + 1
+}
+```
 
 
 
