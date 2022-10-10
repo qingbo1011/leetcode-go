@@ -10,17 +10,17 @@
 >
 > ```go
 > func main() {
->    s := [3]int{1, 2, 3}
->    p := [3]int{3, 2, 1}
->    fmt.Println(s == p)    // false
+> 	s := [3]int{1, 2, 3}
+> 	p := [3]int{3, 2, 1}
+> 	fmt.Println(s == p) // false
 > }
 > ```
 >
 > ```go
 > func main() {
->    s := [3]int{1, 2, 3}
->    p := [3]int{1, 2, 3}
->    fmt.Println(s == p) // false
+> 	s := [3]int{1, 2, 3}
+> 	p := [3]int{1, 2, 3}
+> 	fmt.Println(s == p) // true
 > }
 > ```
 

@@ -129,5 +129,136 @@ func removeElement(nums []int, val int) int {
 
 这题是[LeetCode 438. 找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/)的进阶版，可以先参考[LeetCode 438. 找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/)的题解再来看此题。
 
+> 参考[powcai](https://leetcode.cn/u/powcai/)的[题解](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/solution/chuan-lian-suo-you-dan-ci-de-zi-chuan-by-powcai/)下[时间是个贼](https://leetcode.cn/u/zhang-zhi-qiang-5/)提供的golang代码：
+>
+> ```go
+> var oriMap map[string]int
+> 
+> func findSubstring(s string, words []string) []int {
+> 	oriMap = map[string]int{}
+> 	for _, w := range words {
+> 		oriMap[w]++
+> 	}
+> 	wordSize := len(words[0])
+> 	stepSize := wordSize * len(words)
+> 	var check = func(sk string) bool {
+> 		nowMap := map[string]int{}
+> 		for i := 0; i+wordSize <= len(sk); i += wordSize {
+> 			wk := sk[i : i+wordSize]
+> 			nowMap[wk]++
+> 		}
+> 		return reflect.DeepEqual(nowMap, oriMap)
+> 	}
+> 	res := []int{}
+> 	for i := 0; i+stepSize <= len(s); i++ {
+> 		ss := s[i : i+stepSize]
+> 		if check(ss) {
+> 			res = append(res, i)
+> 		}
+> 	}
+> 	return res
+> }
+> ```
+
+这题运用滑动窗口的思想，维护一个符合条件的滑动窗口即可。需要注意的是，意图给定了`words` 中所有字符串 **长度相同**（`wordSize`）。所以我们**的滑动窗口的长度一定是固定的！**（`stepSize := wordSize * len(words)`）。
+
+- 所以我们遍历i，然后通过`windowString := s[i : i+stepSize]`获取到滑动窗口内的字符串
+- 接着，我们将滑动窗口类的字符串统计成`map`，通过`reflect.DeepEqual`的方法判断滑动窗口内的字符串是否符合条件。若符合则append到结果中；不符合就继续遍历i。
+
+搞懂了思想这题就没这么难了（主要是因为通过`reflect.DeepEqual`来判断两个map的方式，判断滑动窗口是否符合条件，这样就大大降低了难度）
+
+代码如下：
+
+```go
+func findSubstring(s string, words []string) []int {
+	var res []int
+	wordSize := len(words[0])           // 单个单词的长度
+	stepSize := wordSize * len(words)   // 滑动窗口的长度
+	wordsMap := make(map[string]int, 0) // words转成map，与滑动窗口中的windowMap进行比较
+	for _, word := range words {        // 根据words获取到wordsMap
+		wordsMap[word]++
+	}
+	// 开始遍历滑动窗口
+	for i := 0; i+stepSize-1 < len(s); i++ { // i+stepSize-1即为滑动窗口最后一个元素所在索引
+		windowString := s[i : i+stepSize] // [i,i+stepSize-1]，即为当前遍历到的滑动窗口内的字符串
+		if check(windowString, wordsMap, wordSize) {
+			res = append(res, i)
+		}
+	}
+	return res
+}
+
+// 根据windowString和wordsMap，来判断当前的滑动窗口内的字符串是否符合条件（传入wordSize以便将windowString转为wordsMap）
+func check(windowString string, wordsMap map[string]int, wordSize int) bool {
+	// 首先将字符串windowString同样的转为map
+	windowMap := make(map[string]int, 0)
+	for i := 0; i+wordSize-1 < len(windowString); i = i + wordSize { // 看起来复杂其实很简单
+		windowMap[windowString[i:i+wordSize]]++
+	}
+	return reflect.DeepEqual(windowMap, wordsMap)
+}
+```
+
+> 参考：
+>
+> - [Go reflect.DeepEqual](https://www.jianshu.com/p/50380740d04a)
+> - [reflect.DeepEqual函数：判断两个值是否一致](https://blog.csdn.net/m0_37710023/article/details/108284171)
+> - [reflect.DeepEqual() Function in Golang with Examples](https://www.geeksforgeeks.org/reflect-deepequal-function-in-golang-with-examples/)
+>
+> 这里补充一下go中的`reflect.DeepEqual`：The **reflect.DeepEqual()** Function in Golang is used to check whether x and y are “deeply equal” or not.
+>
+> 先直接看源码及源码中的部分注释：
+>
+> ```go
+> // DeepEqual reports whether x and y are ``deeply equal,'' defined as follows.
+> // Two values of identical type are deeply equal if one of the following cases applies.
+> // Values of distinct types are never deeply equal.
+> // ...
+> // Map values are deeply equal when all of the following are true:
+> // they are both nil or both non-nil, they have the same length,
+> // and either they are the same map object or their corresponding keys
+> // (matched using Go equality) map to deeply equal values.
+> func DeepEqual(x, y any) bool {
+>    if x == nil || y == nil {
+>       return x == y
+>    }
+>    v1 := ValueOf(x)
+>    v2 := ValueOf(y)
+>    if v1.Type() != v2.Type() {
+>       return false
+>    }
+>    return deepValueEqual(v1, v2, make(map[visit]bool))
+> }
+> ```
+>
+> 对于`slice`、`map`、`struct`等类型，当比较两个值是否相等时，是不能使用`==`运算符的。
+
+这里偷懒就直接使用`reflect.DeepEqual`了。如果要优化的话就需要自己手写一个判断滑动窗口是否合法的函数：
+
+- 首先比较两个map中的key是否一样
+- 其次比较map中的key锁对应的value是否一样
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
