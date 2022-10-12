@@ -14,7 +14,7 @@ func reverseList(head *ListNode) *ListNode {
 	cur := head
 	for cur != nil {
 		next := cur.Next
-		cur.Next = pre // 修改结点指向
+		cur.Next = pre // 修改节点指向
 		pre = cur
 		cur = next
 	}

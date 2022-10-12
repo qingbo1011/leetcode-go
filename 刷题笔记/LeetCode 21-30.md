@@ -39,6 +39,65 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
 
 
+# 24. 两两交换链表中的节点
+
+[LeetCode 24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+## 双指针
+
+因为这题要求：你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。所以就不能取巧去交换Val值。
+
+> 这题我其实是有点取巧的：因为是单向链表且无循环，所以交换两个节点的处理我在这里是**直接交换两个节点的Val值**的：`cur.Val, next.Val = next.Val, cur.Val`。这样处理一下其他的就很好写了，做一个循环，然后`cur`、`next`指针每次向后移动两位。
+>
+> 代码如下：
+>
+> ```go
+> func swapPairs(head *ListNode) *ListNode {
+> 	if head == nil {
+> 		return nil
+> 	}
+> 	cur, next := head, head.Next
+> 	for next != nil {
+> 		cur.Val, next.Val = next.Val, cur.Val // 交换两节点的val
+> 		cur = cur.Next.Next
+> 		if next.Next == nil { // 做一下判断，不然next = next.Next.Next会panic
+> 			break
+> 		}
+> 		next = next.Next.Next
+> 	}
+> 	return head
+> }
+> ```
+
+不取巧，真正的交换节点的代码，参考[官方题解](https://leetcode.cn/problems/swap-nodes-in-pairs/solution/liang-liang-jiao-huan-lian-biao-zhong-de-jie-di-91/)。
+
+- `temp=dummy`（哨兵节点dummy，这种处理不用再多说）
+- 每次循环中，`pre=temp.Next`，`next=temp.Next.Next`
+- 要交换pre和next，那么就需要temp参与其中，3个指针来处理：`temp.Next=next`、`pre.Next=next.Next`、`next.Next=pre`（这个逻辑打一下草稿就能懂）
+- 开始下一次循环，移动temp：`temp=pre`（打下草稿就很清楚了）
+- 维持循环的条件：`temp.Next!=nil && temp.Next.Next!=nil`（这个取一下节点奇偶数的特殊情况就能搞明白了，不需要加`temp!=nil`）
+
+```go
+func swapPairs(head *ListNode) *ListNode {
+	dummy := &ListNode{Next: head}
+	temp := dummy
+	for temp.Next != nil && temp.Next.Next != nil {
+		// 双指针就位
+		pre := temp.Next
+		next := temp.Next.Next
+		// 利用temp、pre、next这三个指针开始交换pre和next这两个节点
+		temp.Next = next
+		pre.Next = next.Next
+		next.Next = pre
+		// 交换完成，更新temp继续循环
+		temp = pre
+	}
+	return dummy.Next
+}
+```
+
+
+
 # 26. 删除有序数组中的重复项
 
 [LeetCode 26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
