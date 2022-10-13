@@ -178,12 +178,12 @@ func getRight(nums []int, target int) int {
 > 这里的if else处理不是最简洁的，为了方便明白各种情况所以分了三类。其实也可以这么写：
 >
 > ```go
-> if nums[middle] > target {
->    right = middle - 1 // target 在左区间，所以[left, middle - 1]
-> } else { // 当nums[middle] == target的时候，更新left，这样才能得到target的右边界
->    left = middle + 1
->    rightBorder = left
-> }
+> 	if nums[middle] > target {
+>    		right = middle - 1 // target 在左区间，所以[left, middle - 1]
+> 	} else { // 当nums[middle] == target的时候，更新left，这样才能得到target的右边界
+>    		left = middle + 1
+>    		rightBorder = left
+> 	}
 > ```
 >
 > 在寻找左边界的时候就会像上面那样处理。

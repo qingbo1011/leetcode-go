@@ -65,7 +65,6 @@ func (l *MyLinkedList) DeleteAtIndex(index int) {
 	}
 	pre.Next = pre.Next.Next
 	l.size-- // 别忘了链表size-1
-
 }
 
 /**

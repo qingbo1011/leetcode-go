@@ -20,11 +20,11 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	for i := 0; i < n; i++ { // 双指针就位
 		p2 = p2.Next
 	}
-	for p2.Next != nil { // 找到要删除结点的前一个结点位置了（即p1）
+	for p2.Next != nil { // p1就位到要删除节点的前一个位置
 		p1 = p1.Next
 		p2 = p2.Next
 	}
-	p1.Next = p1.Next.Next
+	p1.Next = p1.Next.Next // 删除节点
 	return dummy.Next
 }
 ```
