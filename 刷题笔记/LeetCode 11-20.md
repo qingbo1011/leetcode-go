@@ -1,3 +1,13 @@
+# 15. 三数之和
+
+[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)
+
+
+
+
+
+
+
 # 19. 删除链表的倒数第 N 个结点
 
 [LeetCode 19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
@@ -35,16 +45,13 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 [LeetCode 20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
 
-使用map作为左右括号的匹配，其中：
+## 栈
 
-- **key为右括号**
-- **value为左括号**
+我们创建一个切片用来模拟栈。当栈中的**栈底元素是一个右括号**时，就不用继续遍历了，此时不可能是有效的括号（这个很好理解）。
 
-> 这里顺序很重要不能搞反了。
+接下来的逻辑就是遍历匹配了，画一下草图就能理解。
 
-然后我们创建一个切片用来模拟栈。当栈中的**栈底元素是一个右括号**时，就不用继续遍历了，此时不可能是有效的括号（这个很好理解）。
-
-接下来的逻辑就是遍历匹配了，画一下草图就能理解，代码如下：
+代码如下：
 
 ```go
 func isValid(s string) bool {

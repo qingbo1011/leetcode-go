@@ -2,7 +2,7 @@
 
 [LeetCode 1. 两数之和](https://leetcode.cn/problems/two-sum/)
 
-## 哈希表
+## HashMap
 
 具体实现不用多说了，之前写java的时候就实现过了。
 
