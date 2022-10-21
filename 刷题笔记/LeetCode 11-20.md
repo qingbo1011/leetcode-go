@@ -73,6 +73,39 @@ func threeSum(nums []int) [][]int {
 
 
 
+# 18. 四数之和
+
+[LeetCode 18. 四数之和](https://leetcode.cn/problems/4sum/)
+
+## 排序+双指针
+
+参考：
+
+- **[代码随想录视频](https://www.bilibili.com/video/BV1DS4y147US/?)**
+- [官方题解](https://leetcode.cn/problems/4sum/solution/si-shu-zhi-he-by-leetcode-solution/)
+
+四数之和，和[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)是一个思路，都是使用排序+双指针，基本解法就是在[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)的基础上再套一层for循环。
+
+对于[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)双指针法就是将原本暴力O(n^3^)的解法，降为O(n^2^)的解法，四数之和的双指针解法就是将原本暴力O(n^4^)的解法，降为O(n^3^)的解法。
+
+
+
+具体的逻辑可以看看上面的视频。
+
+代码如下：
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 19. 删除链表的倒数第 N 个结点
 
 [LeetCode 19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
