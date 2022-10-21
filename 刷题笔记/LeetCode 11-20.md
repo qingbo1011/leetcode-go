@@ -2,9 +2,74 @@
 
 [LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)
 
+## 排序+双指针
 
+三数之和不同于两数之和（[LeetCode 1. 两数之和](https://leetcode.cn/problems/two-sum/)），如果使用哈希表的方法会非常麻烦。所以这里我们使用**排序+双指针**的方法。
 
+参考：
 
+- [官方题解](https://leetcode.cn/problems/3sum/solution/san-shu-zhi-he-by-leetcode-solution/)
+- **[代码随想录B站视频](https://www.bilibili.com/video/BV1GW4y127qo/?)**
+
+这题最关键的部分就在去重，其中具体细节都在两层循环的代码中。可以重点参考一下上面的题解和视频。
+
+我们要找到`nums[i]+nums[left]+nums[right]==0`这三个数，同时注意对结果集res进行去重：
+
+- 第一个数`nums[i]`的去重：确保`nums[i]`不会重复使用（即出现`nums[i]==nums[i-1]`，说明不能遍历当前的`i`，不然会重复）
+
+  ```go
+  if i > 0 && nums[i] == nums[i-1] { // 保证nums[i]不会在结果集中重复
+     continue
+  }
+  ```
+
+- 对后两个数nums[left]和nums[right]的去重：收缩后面的区间时，如果出现`nums[left] == nums[left+1]`，应该`left++`；如果出现`nums[right] == nums[right-1]`，应该`right--`
+
+  ```go
+  for left < right && nums[left] == nums[left+1] { // 对nums[left]进行去重
+     left++
+  }
+  for left < right && nums[right] == nums[right-1] { // 对nums[right]进行去重
+     right--
+  }
+  ```
+
+代码如下：
+
+```go
+func threeSum(nums []int) [][]int {
+	res := make([][]int, 0)
+	sort.Ints(nums) // 先排序
+	for i := 0; i < len(nums); i++ {
+		if nums[i] > 0 { // 后面再也不可能出现三数之和为0的三元组了
+			return res
+		}
+		if i > 0 && nums[i] == nums[i-1] { // 保证nums[i]不会在结果集中重复
+			continue
+		}
+		left, right := i+1, len(nums)-1
+		for left < right {
+			if nums[i]+nums[left]+nums[right] < 0 { // 需要更新left
+				left++
+			} else if nums[i]+nums[left]+nums[right] > 0 { // 需要更新right
+				right--
+			} else { // 找到结果集了
+				res = append(res, []int{nums[i], nums[left], nums[right]})
+				for left < right && nums[left] == nums[left+1] { // 对nums[left]进行去重
+					left++
+				}
+				for left < right && nums[right] == nums[right-1] { // 对nums[right]进行去重
+					right--
+				}
+				// 去重后收缩left和right，让for left < right循环可以找到出口
+				left++
+				right--
+			}
+		}
+	}
+	return res
+}
+```
 
 
 
