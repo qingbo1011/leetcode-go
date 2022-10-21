@@ -21,7 +21,10 @@ func containsDuplicate(nums []int) bool {
 }
 ```
 
-
+> 复杂度分析：
+>
+> - 时间复杂度：O(N)，其中N为数组的长度。
+> - 空间复杂度：O(N)，其中N为数组的长度。
 
 
 

@@ -1,3 +1,48 @@
+# 53. 最大子数组和
+
+[LeetCode 53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+## 贪心算法
+
+动态规划的解法等到后面写动态规划笔记时再补充。这里先用贪心算法解决。
+
+这题需要用贪心思想简单分析，就可以得出时间复杂度为O(n)的算法，而不是完全暴力的O(n^2)。
+
+贪心思想：在遍历过程中，**如果前面几个数加起来的和sum<0了，那下一个数当然不愿意加上前面的和，所以就舍去前面的子数组，重新开始计算连续子数组和**。
+
+我们用max来存储最大值，sum来存储遍历过程中子数组的和。在遍历过程中：
+
+- 如果`sum<0`，那么就舍去前面的数，从i开始继续向下遍历（`sum=nums[i]`）
+- 如果`sum>=0`，继续向下遍历即可
+- 注意更新`max`
+
+代码如下：
+
+```go
+func maxSubArray(nums []int) int {
+	ans := nums[0]
+	sum := 0
+	for _, num := range nums {
+		if sum < 0 {
+			sum = num
+		} else {
+			sum = sum + num
+		}
+		ans = max(ans, sum)
+	}
+	return ans
+}
+
+func max(x int, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+```
+
+
+
 # 54. 螺旋矩阵
 
 [LeetCode 54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
