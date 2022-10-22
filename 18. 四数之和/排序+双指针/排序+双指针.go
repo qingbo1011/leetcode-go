@@ -20,7 +20,7 @@ func fourSum(nums []int, target int) [][]int {
 			if target >= 0 && nums[k]+nums[i] > target { // 后面不可能再出现结果集了（注意这里要有target >= 0的条件）
 				break
 			}
-			if i > k+1 && nums[i] == nums[i-1] { // 保证nums[k]不会在结果集中重复
+			if i > k+1 && nums[i] == nums[i-1] { // 保证nums[i]不会在结果集中重复
 				continue
 			}
 			// 这里的逻辑就跟三数之和差不多了
@@ -35,11 +35,15 @@ func fourSum(nums []int, target int) [][]int {
 					for left < right && nums[left] == nums[left+1] { // 对nums[left]进行去重
 						left++
 					}
+					for left < right && nums[right] == nums[right-1] { // 对nums[right]进行去重
+						right--
+					}
+					// 去重后收缩left和right，让for left < right循环可以找到出口
+					left++
+					right--
 				}
 			}
 		}
 	}
-
 	return res
-
 }

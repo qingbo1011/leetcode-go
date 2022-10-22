@@ -86,23 +86,65 @@ func threeSum(nums []int) [][]int {
 
 四数之和，和[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)是一个思路，都是使用排序+双指针，基本解法就是在[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)的基础上再套一层for循环。
 
-对于[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)双指针法就是将原本暴力O(n^3^)的解法，降为O(n^2^)的解法，四数之和的双指针解法就是将原本暴力O(n^4^)的解法，降为O(n^3^)的解法。
+需要注意的几点：
 
+- 在判断是否剪枝时（即后面是否不可能再出现结果集了），不能单纯的`nums[k] > target`、`nums[k]+nums[i] > target`。必须要加上`target >= 0`的条件！比如数组是`[-4, -3, -2, -1]`，`target`是`-10`，不能因为`-4 > -10`而跳过。
+- 保证nums[k]不会在结果集中重复：`if k > 0 && nums[k] == nums[k-1]`；保证nums[i]不会在结果集中重复：`if i > k+1 && nums[i] == nums[i-1]`
 
+> 对于[LeetCode 15. 三数之和](https://leetcode.cn/problems/3sum/)双指针法就是将原本暴力O(n^3^)的解法，降为O(n^2^)的解法，四数之和的双指针解法就是将原本暴力O(n^4^)的解法，降为O(n^3^)的解法。
+>
 
-具体的逻辑可以看看上面的视频。
+**具体的逻辑可以看看上面的视频。**
 
 代码如下：
 
+```go
+func fourSum(nums []int, target int) [][]int {
+	res := make([][]int, 0)
+	sort.Ints(nums)
+	for k := 0; k < len(nums); k++ {
+		if target >= 0 && nums[k] > target { // 后面不可能再出现结果集了（注意这里要有target >= 0的条件）
+			break
+		}
+		if k > 0 && nums[k] == nums[k-1] { // 保证nums[k]不会在结果集中重复
+			continue
+		}
+		for i := k + 1; i < len(nums); i++ {
+			if target >= 0 && nums[k]+nums[i] > target { // 后面不可能再出现结果集了（注意这里要有target >= 0的条件）
+				break
+			}
+			if i > k+1 && nums[i] == nums[i-1] { // 保证nums[i]不会在结果集中重复
+				continue
+			}
+			// 这里的逻辑就跟三数之和差不多了
+			left, right := i+1, len(nums)-1
+			for left < right {
+				if nums[k]+nums[i]+nums[left]+nums[right] < target { // 更新left
+					left++
+				} else if nums[k]+nums[i]+nums[left]+nums[right] > target { // 更新right
+					right--
+				} else { // 找到结果集了
+					res = append(res, []int{nums[k], nums[i], nums[left], nums[right]})
+					for left < right && nums[left] == nums[left+1] { // 对nums[left]进行去重
+						left++
+					}
+					for left < right && nums[right] == nums[right-1] { // 对nums[right]进行去重
+						right--
+					}
+					// 去重后收缩left和right，让for left < right循环可以找到出口
+					left++
+					right--
+				}
+			}
+		}
+	}
+	return res
+}
+```
 
-
-
-
-
-
-
-
-
+> 四数之和的双指针解法是两层for循环`nums[k] + nums[i]`为确定值，依然是循环内有`left`和`right`下标作为双指针，找出`nums[k] + nums[i] + nums[left] + nums[right] == target`的情况，三数之和的时间复杂度是O(n^2^)，四数之和的时间复杂度是O(n^3^) 。
+>
+> 那么一样的道理，五数之和、六数之和等等都采用这种解法。
 
 
 
