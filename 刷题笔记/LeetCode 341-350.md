@@ -1,3 +1,40 @@
+# 344. 反转字符串
+
+[LeetCode 344. 反转字符串](https://leetcode.cn/problems/reverse-string/)
+
+## 双指针
+
+直接使用双指针实现反转。思路很简单不用多说。
+
+代码如下：
+
+```go
+func reverseString(s []byte) {
+	left, right := 0, len(s)-1
+	for left < right {
+		s[left], s[right] = s[right], s[left]
+		left++
+		right--
+	}
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 349. 两个数组的交集
 
 [LeetCode 349. 两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/)
