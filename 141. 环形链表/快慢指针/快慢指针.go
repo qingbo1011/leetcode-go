@@ -5,16 +5,8 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func main() {
-
-}
-
 func hasCycle(head *ListNode) bool {
-	if head == nil {
-		return false
-	}
-	slow := head // 慢指针
-	fast := head // 快指针
+	slow, fast := head, head
 	for fast != nil && fast.Next != nil {
 		slow = slow.Next
 		fast = fast.Next.Next
@@ -23,4 +15,8 @@ func hasCycle(head *ListNode) bool {
 		}
 	}
 	return false
+}
+
+func main() {
+
 }

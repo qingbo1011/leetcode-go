@@ -10,13 +10,13 @@ func main() {
 }
 
 func detectCycle(head *ListNode) *ListNode {
-	m := make(map[*ListNode]int)
+	m := make(map[*ListNode]struct{})
 	p := head
 	for p != nil {
 		if _, ok := m[p]; ok { // 找到重复索引了
 			return p
 		}
-		m[p] = 1
+		m[p] = struct{}{}
 		p = p.Next
 	}
 	return nil

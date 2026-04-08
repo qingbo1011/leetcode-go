@@ -5,33 +5,30 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func main() {
-
-}
-
 func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
-	res := &ListNode{}
-	tmp := res
+	dummy := &ListNode{} // 哑节点
+	cur := dummy
 	for list1 != nil && list2 != nil {
 		if list1.Val < list2.Val {
-			tmp.Next = list1
-			tmp = tmp.Next
+			cur.Next = list1
+			cur = cur.Next
 			list1 = list1.Next
 		} else {
-			tmp.Next = list2
-			tmp = tmp.Next
+			cur.Next = list2
+			cur = cur.Next
 			list2 = list2.Next
 		}
 	}
-	for list1 != nil {
-		tmp.Next = list1
-		tmp = tmp.Next
-		list1 = list1.Next
+	// 直接接上剩余链表
+	if list1 != nil {
+		cur.Next = list1
+	} else {
+		cur.Next = list2
 	}
-	for list2 != nil {
-		tmp.Next = list2
-		tmp = tmp.Next
-		list2 = list2.Next
-	}
-	return res.Next
+
+	return dummy.Next
+}
+
+func main() {
+
 }

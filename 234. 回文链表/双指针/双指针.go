@@ -5,11 +5,8 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func main() {
-
-}
-
 func isPalindrome(head *ListNode) bool {
+	// 将链表的val值记录在切片里，然后双指针
 	arr := make([]int, 0)
 	for head != nil {
 		arr = append(arr, head.Val)
@@ -24,4 +21,8 @@ func isPalindrome(head *ListNode) bool {
 		right--
 	}
 	return true
+}
+
+func main() {
+
 }

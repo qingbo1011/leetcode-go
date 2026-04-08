@@ -5,28 +5,25 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func main() {
-
-}
-
 func detectCycle(head *ListNode) *ListNode {
-	if head == nil {
-		return nil
-	}
-	slow := head
-	fast := head
-	pre := head
+	slow, fast := head, head
 	for fast != nil && fast.Next != nil {
 		slow = slow.Next
 		fast = fast.Next.Next
-		// 先移动在判断，因为slow和fast初始都在head上
+		// 如果有环，当slow和fast相遇时，将slow重新指向head，
+		// 然后slow和fast每次都走一步，它们再次相遇的节点就是环的入口。
 		if slow == fast {
-			for slow != pre {
+			slow = head
+			for slow != fast {
 				slow = slow.Next
-				pre = pre.Next
+				fast = fast.Next
 			}
-			return pre
+			return slow
 		}
 	}
 	return nil
+}
+
+func main() {
+
 }
