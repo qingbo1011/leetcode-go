@@ -2,11 +2,6 @@ package main
 
 import "fmt"
 
-func main() {
-	s := "pwwkew"
-	fmt.Println(lengthOfLongestSubstring(s))
-}
-
 func lengthOfLongestSubstring(s string) int {
 	if len(s) == 0 {
 		return 0
@@ -28,9 +23,7 @@ func lengthOfLongestSubstring(s string) int {
 	return max(ans, tmp)
 }
 
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
+func main() {
+	s := "pwwkew"
+	fmt.Println(lengthOfLongestSubstring(s))
 }

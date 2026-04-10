@@ -2,12 +2,6 @@ package main
 
 import "fmt"
 
-func main() {
-	s := "ADOBECODEBANC"
-	t := "ABC"
-	fmt.Println(minWindow(s, t))
-}
-
 func minWindow(s string, t string) string {
 	ans := ""
 	lengthS, lengthT := len(s), len(t)
@@ -24,8 +18,8 @@ func minWindow(s string, t string) string {
 	windowArr := [58]int{}
 	for i < lengthS {
 		windowArr[s[i]-'A']++
-		if check(windowArr, tArr) { // 如果符合条件了就要收缩滑动窗口以得到最小的覆盖子串
-			for check(windowArr, tArr) {
+		if isCovered(windowArr, tArr) { // 如果符合条件了就要收缩滑动窗口以得到最小的覆盖子串
+			for isCovered(windowArr, tArr) {
 				windowArr[s[left]-'A']--
 				left++
 			}
@@ -36,7 +30,7 @@ func minWindow(s string, t string) string {
 	return ans
 }
 
-func check(windowArr [58]int, tArr [58]int) bool {
+func isCovered(windowArr [58]int, tArr [58]int) bool {
 	for i := 0; i < 58; i++ {
 		if windowArr[i] < tArr[i] {
 			return false
@@ -45,9 +39,8 @@ func check(windowArr [58]int, tArr [58]int) bool {
 	return true
 }
 
-func min(ans string, s string) string {
-	if ans == "" || len(s) < len(ans) {
-		return s
-	}
-	return ans
+func main() {
+	s := "ADOBECODEBANC"
+	t := "ABC"
+	fmt.Println(minWindow(s, t))
 }
