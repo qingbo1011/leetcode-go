@@ -2,11 +2,6 @@ package main
 
 import "fmt"
 
-func main() {
-	nums := []int{2, 3, 1, 1, 4}
-	fmt.Println(canJump(nums))
-}
-
 func canJump(nums []int) bool {
 	n := len(nums)
 	farthest := 0
@@ -19,9 +14,7 @@ func canJump(nums []int) bool {
 	return farthest >= n-1
 }
 
-func max(x int, y int) int {
-	if x > y {
-		return x
-	}
-	return y
+func main() {
+	nums := []int{2, 3, 1, 1, 4}
+	fmt.Println(canJump(nums))
 }
